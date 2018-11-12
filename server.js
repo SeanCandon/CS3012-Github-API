@@ -34,14 +34,14 @@ app.get('/', function (req, res) {
       var q = url.parse(req.url, true).query;
       var txt = q.search;
       //console.log(txt);
-
+      /*
       fs.writeFile('file.txt', txt, function(err, data){
         if(err) console.log(err);
         console.log(txt);
-      })
-      
+      })*/
+
       const scriptPath = 'gitInfo.py'
-      const process = spawn('python', [scriptPath])
+      const process = spawn('python', [scriptPath, txt])
       process.stdout.on('data', (myData) => {
           // Do whatever you want with the returned data.
           // ...

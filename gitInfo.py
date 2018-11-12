@@ -5,27 +5,46 @@ import sys
 
 firebase = firebase.FirebaseApplication('https://github-api-5f6b3.firebaseio.com', None)
 
-g = Github("ac6ad31084ea294f6e287cf860e5fb3c06136cbf")
+lines = [line.rstrip('\n') for line in open('cred.txt')]
+
+g = Github(lines[0])
+
+
 
 u = g.get_user(sys.argv[1])
-print(u.name)
+f = open("file.txt", "a")
+f.write(u.login)
+print(u.login)
+i=0
+s = 0
+commits = 0
+
+for r in u.get_repos():
+    s = s + r.size
+    i = i+1
+    for c in r.get_stats_contributors():
+        if(c.author.login == u.login):
+            commits += c.total
+s = s/i
+commits = commits/i
+data = {'size': s, 'avg commits': commits}
+result = firebase.put('', '/' + u.name, data)
 
 followers = u.get_followers()
 
 for f in followers:
     name = f.name
-    path = '/users/' + name
-    #print(f.name + "'s %s" % "shite")
+    path = '/followers/' + name
+    i=0
+    s = 0
+    commits = 0
     for r in f.get_repos():
-        rn = r.name
-        
-        #f.write(r.get_languages());
-    #    f = open("file.txt", "a")
-    #    f.write(str(r.name) + "\n")
-        #print(type(r.name))
-        #print(r.name)
-#        print(r.name)
-    #    print(r.get_languages())
-    #    print("     " + r.name)
-    #print(f);
-#    print("---------------------------------------")
+        s = s + r.size
+        i = i+1
+        for c in r.get_stats_contributors():
+            if(c.author.login == f.login):
+                commits += c.total
+    s = s/i
+    commits = commits/i
+    data = {'size': s, 'avg commits': commits}
+    result = firebase.put('', path, data)
