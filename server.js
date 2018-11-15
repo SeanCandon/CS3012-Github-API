@@ -68,6 +68,13 @@ app.get('/result', function(req, res){
     console.log(userLogin);
     //var jsonFile = require('./data.json')
 
+    //let rawdata = fs.readFileSync('data.json');
+    //let jsonFile = JSON.parse(rawdata);
+    //delete jsonFile.commits[0];
+    //var jsonData = require('./data.json');
+    //console.log(jsonData.commits);
+    //delete jsonData.commits;
+
     const { spawn } = require('child_process')
     const scriptPath = 'gitInfo.py'
     const process = spawn('python', [scriptPath, userLogin])
@@ -76,14 +83,23 @@ app.get('/result', function(req, res){
         var item = snapshot.val();
         var json = JSON.stringify(item);
         fs.writeFile('data.json', json, 'utf8', null);
+
+        fs.readFile('page2.html', function(err, data){
+          res.writeHead(200, {'Content-Type': 'text/html'});
+          var result = data.toString('utf-8').replace('{{data}}', json);
+          res.write(data);
+          res.write(result);
+          return res.end();
+        })
       });
-      res.send("ok");
-      return res.end();
+      //res.send("ok");
+      //return res.end();
     })
     process.stderr.on('data', (myErr) => {
          //If anything gets written to stderr, it'll be in the myErr variable
         //console.log(myErr);
     })
+    //res.end();
 
 });
 
