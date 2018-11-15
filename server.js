@@ -48,17 +48,22 @@ app.get('/', function (req, res) {
       console.log("txt = " + txt);
       //res.send("ok");
 
-      const scriptPath = 'gitInfo.py'
-      const process = spawn('python', [scriptPath, txt])
-      process.stdout.on('data', (myData) => {
+      fs.readFile('page2.html', 'utf-8', function(err, data){
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        res.write(data);
+        return res.end();
+
+      //const scriptPath = 'gitInfo.py'
+      c//onst process = spawn('python', [scriptPath, txt])
+      //process.stdout.on('data', (myData) => {
         //res.send('wow');
-        res.send("ok");
-        res.end();
+        //res.send("ok");
+        //res.end();
         //ready = true;
       })
-      process.stderr.on('data', (myErr) => {
+      //process.stderr.on('data', (myErr) => {
           // If anything gets written to stderr, it'll be in the myErr variable
-      })
+      //})
 
     }*/
 });
@@ -68,37 +73,30 @@ app.get('/result', function(req, res){
     console.log(userLogin);
     //var jsonFile = require('./data.json')
 
-    //let rawdata = fs.readFileSync('data.json');
-    //let jsonFile = JSON.parse(rawdata);
-    //delete jsonFile.commits[0];
-    //var jsonData = require('./data.json');
-    //console.log(jsonData.commits);
-    //delete jsonData.commits;
-
-    const { spawn } = require('child_process')
-    const scriptPath = 'gitInfo.py'
-    const process = spawn('python', [scriptPath, userLogin])
-    process.stdout.on('data', function(data) {
+    //const { spawn } = require('child_process')
+    //const scriptPath = 'gitInfo.py'
+    //const process = spawn('python', [scriptPath, userLogin])
+    //process.stdout.on('data', function(data) {
       var comm = database.ref('/'+userLogin).once('value').then(function(snapshot) {
         var item = snapshot.val();
         var json = JSON.stringify(item);
-        fs.writeFile('data.json', json, 'utf8', null);
+        //fs.writeFile('data.json', json, 'utf8', null);
 
-        fs.readFile('page2.html', function(err, data){
+        fs.readFile('page2.html', 'utf-8', function(err, data){
           res.writeHead(200, {'Content-Type': 'text/html'});
           var result = data.toString('utf-8').replace('{{data}}', json);
-          res.write(data);
           res.write(result);
+          res.write(data);
           return res.end();
-        })
+        });
       });
       //res.send("ok");
       //return res.end();
-    })
-    process.stderr.on('data', (myErr) => {
+    //})
+    //process.stderr.on('data', (myErr) => {
          //If anything gets written to stderr, it'll be in the myErr variable
         //console.log(myErr);
-    })
+    //})
     //res.end();
 
 });
