@@ -28,64 +28,30 @@ var options = {
   args: ['value1']
 };
 
-//const { spawn } = require('child_process')
-
 // GET response for '/'
 app.get('/', function (req, res) {
 
-    //if(req.url == "/"){
-      fs.readFile('home.html', function(err, data){
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.write(data);
-        return res.end();
-      })
-    //}
-    /*
-    else{
-
-      var q = url.parse(req.url, true).query;
-      var txt = q.search;
-      console.log("txt = " + txt);
-      //res.send("ok");
-
-      fs.readFile('page2.html', 'utf-8', function(err, data){
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.write(data);
-        return res.end();
-
-      //const scriptPath = 'gitInfo.py'
-      c//onst process = spawn('python', [scriptPath, txt])
-      //process.stdout.on('data', (myData) => {
-        //res.send('wow');
-        //res.send("ok");
-        //res.end();
-        //ready = true;
-      })
-      //process.stderr.on('data', (myErr) => {
-          // If anything gets written to stderr, it'll be in the myErr variable
-      //})
-
-    }*/
+    fs.readFile('home.html', function(err, data){
+      res.writeHead(200, {'Content-Type': 'text/html'});
+      res.write(data);
+      return res.end();
+    })
 });
 
 app.get('/result', function(req, res){
     var userLogin = req.query.search;
-    var userLogin2 = userLogin;
-    if(shouldUpdate(userLogin)){
-      userLogin2 = ''
-      userLogin2 = delChars(userLogin);
-    }
-    console.log(userLogin2);
+
+    console.log(userLogin);
     //var jsonFile = require('./data.json')
 
     const { spawn } = require('child_process')
     const scriptPath = 'gitInfo.py'
-    const process = spawn('python', [scriptPath, userLogin2, shouldUpdate(userLogin)])
+    const process = spawn('python', [scriptPath, userLogin])
     process.stdout.on('data', function(data) {
       var comm = database.ref('/'+userLogin).once('value').then(function(snapshot) {
         var item = snapshot.val();
         var json = JSON.stringify(item);
-        //fs.writeFile('data.json', json, 'utf8', null);
+        fs.writeFile('data.json', json, 'utf8', null);
 
         fs.readFile('page2.html', 'utf-8', function(err, data){
           res.writeHead(200, {'Content-Type': 'text/html'});
@@ -106,34 +72,6 @@ app.get('/result', function(req, res){
 
 });
 
-function shouldUpdate(str){
-  var l = str.length;
-  //var upd = true;
-  for(var i=l-3; i<l; i++){
-    if(i==l-3){
-      if(str.charAt(i) != ' ')
-        return false;
-    }
-    if(i==l-2){
-      if(str.charAt(i) != '-')
-        return false;
-    }
-    if(i==l-1){
-      if(str.charAt(i) != 'u')
-        return false;
-    }
-  }
-  return true;
-}
-
-function delChars(str){
-  var l = str.length;
-  var newstr = '';
-  for(var i=0; i<l-3; i++){
-    newstr += str.charAt(i);
-  }
-  return newstr;
-}
 
 // start up the server
 app.listen(8080, function () {

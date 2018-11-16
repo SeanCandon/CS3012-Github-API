@@ -8,27 +8,20 @@
   <script>
     var mydata = {{data}};
     window.onload = function() {
-      var densityData = {
-        label: 'User Entered',
+      var daysData = {
+        //label: 'User Entered',
         //data: [5427, 5243, 5514, 3933, 1326, 687, 1271, 1638],
-        data: [mydata.commits.user, mydata.size.user],
+        data: [mydata.sunday, mydata.monday, mydata.tuesday, mydata.wednesday,
+        mydata.thursday, mydata.friday, mydata.saturday],
         backgroundColor: 'rgba(0, 99, 132, 0.6)',
         borderColor: 'rgba(0, 99, 132, 1)',
-        yAxisID: "y-axis-density"
-      };
-
-      var gravityData = {
-        label: 'User Followers',
-        //data: [3.7, 8.9, 9.8, 3.7, 23.1, 9.0, 8.7, 11.0],
-        data: [mydata.commits.followers, mydata.size.followers],
-        backgroundColor: 'rgba(99, 132, 0, 0.6)',
-        borderColor: 'rgba(99, 132, 0, 1)',
-        yAxisID: "y-axis-gravity"
+        yAxisID: "y-axis-days"
       };
 
       var planetData = {
-        labels: ["Avg Commits", "Avg Repo Size"],
-        datasets: [densityData, gravityData]
+        labels: ["Sunday", "Monday", "Tuesday", "Wednesday",
+         "Thursday", "Friday", "Saturday"],
+        datasets: [daysData]
       };
 
       var chartOptions = {
@@ -38,9 +31,7 @@
             categoryPercentage: 0.6
           }],
           yAxes: [{
-            id: "y-axis-density"
-          }, {
-            id: "y-axis-gravity"
+            id: "y-axis-days"
           }]
         }
       };
