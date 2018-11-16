@@ -7,15 +7,47 @@ firebase = firebase.FirebaseApplication('https://github-api-5f6b3.firebaseio.com
 lines = [line.rstrip('\n') for line in open('cred.txt')]
 
 g = Github(lines[0])
-
 u = g.get_user(sys.argv[1])
-print(u.login)
-i=0
-s = 0
-commits = 0
+username = sys.argv[1]
+print(username)
+upd = sys.argv[2]
+'''
+str = sys.argv[1]
+l = len(str)
+upd = True
+i = l-3
+while i<l:
+    if(i==l-3):
+      if(str[i] != ' ')
+        upd = False
 
+    if(i==l-2):
+      if(str[i] != '-')
+        upd = False
+
+    if(i==l-1):
+      if(str[i] != 'u')
+        upd = False
+
+    i += 1
+
+usrn = ''
+
+if upd is True:
+    c = 0
+    while c<l-3:
+        usrn += str[c]
+        c += 1
+
+
+if upd is False:
+    usrn = str
+
+u = g.get_user(usrn)
+print(usrn)
+'''
 #result = firebase.delete('/followers', '')
-
+'''
 for r in u.get_repos():
     s = s + r.size
     i = i+1
@@ -77,3 +109,38 @@ data = {'user': sizeU, 'followers': sizeA}
 result = firebase.put('', '/'+u.login+'/size', data)
 data = {'user': commU, 'followers': commA}
 result = firebase.put('', '/'+u.login+'/commits', data)
+
+
+'''
+
+result = firebase.get('/'+username, None)
+if result is None:
+    upd = True
+
+if upd is True:
+
+    sunday = 0
+    monday = 0
+    tuesday = 0
+    wednesday = 0
+    thursday = 0
+    friday = 0
+    saturday = 0
+
+    for r in u.get_repos():
+        ca = r.get_stats_commit_activity()
+        c = len(ca)
+        i = 1
+        for c1 in ca:
+            days = c1.days
+            sunday += days[0]
+            monday += days[1]
+            tuesday += days[2]
+            wednesday += days[3]
+            thursday += days[4]
+            friday += days[5]
+            saturday += days[6]
+
+    data = {'sunday': sunday, 'monday': monday, 'tuesday': tuesday, 'wednesday': wednesday,
+            'thursday': thursday, 'friday': friday, 'saturday': saturday}
+    report = firebase.put('', '/'+username, data)

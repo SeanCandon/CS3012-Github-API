@@ -70,13 +70,18 @@ app.get('/', function (req, res) {
 
 app.get('/result', function(req, res){
     var userLogin = req.query.search;
-    console.log(userLogin);
+    var userLogin2 = userLogin;
+    if(shouldUpdate(userLogin)){
+      userLogin2 = ''
+      userLogin2 = delChars(userLogin);
+    }
+    console.log(userLogin2);
     //var jsonFile = require('./data.json')
 
-    //const { spawn } = require('child_process')
-    //const scriptPath = 'gitInfo.py'
-    //const process = spawn('python', [scriptPath, userLogin])
-    //process.stdout.on('data', function(data) {
+    const { spawn } = require('child_process')
+    const scriptPath = 'gitInfo.py'
+    const process = spawn('python', [scriptPath, userLogin2, shouldUpdate(userLogin)])
+    process.stdout.on('data', function(data) {
       var comm = database.ref('/'+userLogin).once('value').then(function(snapshot) {
         var item = snapshot.val();
         var json = JSON.stringify(item);
@@ -92,14 +97,43 @@ app.get('/result', function(req, res){
       });
       //res.send("ok");
       //return res.end();
-    //})
-    //process.stderr.on('data', (myErr) => {
+    })
+    process.stderr.on('data', (myErr) => {
          //If anything gets written to stderr, it'll be in the myErr variable
         //console.log(myErr);
-    //})
-    //res.end();
+    })
+    //res.end("ok");
 
 });
+
+function shouldUpdate(str){
+  var l = str.length;
+  //var upd = true;
+  for(var i=l-3; i<l; i++){
+    if(i==l-3){
+      if(str.charAt(i) != ' ')
+        return false;
+    }
+    if(i==l-2){
+      if(str.charAt(i) != '-')
+        return false;
+    }
+    if(i==l-1){
+      if(str.charAt(i) != 'u')
+        return false;
+    }
+  }
+  return true;
+}
+
+function delChars(str){
+  var l = str.length;
+  var newstr = '';
+  for(var i=0; i<l-3; i++){
+    newstr += str.charAt(i);
+  }
+  return newstr;
+}
 
 // start up the server
 app.listen(8080, function () {
