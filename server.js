@@ -3,7 +3,6 @@ var app = express();
 var fs = require('fs');
 var url = require('url');
 var admin = require('firebase-admin')
-var ps = require('python-shell')
 
 var serviceAccount = require("./github-api-5f6b3-firebase-adminsdk-uoc2f-f173c3b19b.json");
 
@@ -17,7 +16,6 @@ var database = admin.database();
 var ready = false;
 var prev = ""
 
-// set up the template engine
 app.set('views', './');
 app.set('view engine', 'pug');
 
@@ -28,7 +26,6 @@ var options = {
   args: ['value1']
 };
 
-// GET response for '/'
 app.get('/', function (req, res) {
 
     fs.readFile('home.html', function(err, data){
@@ -42,7 +39,6 @@ app.get('/result', function(req, res){
     var userLogin = req.query.search;
 
     console.log(userLogin);
-    //var jsonFile = require('./data.json')
 
     const { spawn } = require('child_process')
     const scriptPath = 'gitInfo.py'
@@ -61,14 +57,11 @@ app.get('/result', function(req, res){
           return res.end();
         });
       });
-      //res.send("ok");
-      //return res.end();
+
     })
     process.stderr.on('data', (myErr) => {
-         //If anything gets written to stderr, it'll be in the myErr variable
-        //console.log(myErr);
+
     })
-    //res.end("ok");
 
 });
 

@@ -8,20 +8,31 @@
   <script>
     var mydata = {{data}};
     window.onload = function() {
-      var daysData = {
-        //label: 'User Entered',
-        //data: [5427, 5243, 5514, 3933, 1326, 687, 1271, 1638],
-        data: [mydata.sunday, mydata.monday, mydata.tuesday, mydata.wednesday,
-        mydata.thursday, mydata.friday, mydata.saturday],
+      var userData = {
+        label: 'User',
+        data: [mydata.user.sunday, mydata.user.monday, mydata.user.tuesday,
+          mydata.user.wednesday, mydata.user.thursday, mydata.user.friday,
+          mydata.user.saturday],
         backgroundColor: 'rgba(0, 99, 132, 0.6)',
         borderColor: 'rgba(0, 99, 132, 1)',
+        yAxisID: "y-axis-days"
+      };
+
+      var followersData = {
+        label: 'Followers',
+        data: [mydata.followers.sunday, mydata.followers.monday,
+          mydata.followers.tuesday, mydata.followers.wednesday,
+          mydata.followers.thursday, mydata.followers.friday,
+          mydata.followers.saturday],
+        backgroundColor: 'rgba(99, 132, 0, 0.6)',
+        borderColor: 'rgba(99, 132, 0, 1)',
         yAxisID: "y-axis-days"
       };
 
       var planetData = {
         labels: ["Sunday", "Monday", "Tuesday", "Wednesday",
          "Thursday", "Friday", "Saturday"],
-        datasets: [daysData]
+        datasets: [userData, followersData]
       };
 
       var chartOptions = {
