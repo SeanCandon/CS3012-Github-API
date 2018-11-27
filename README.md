@@ -19,6 +19,6 @@ database. Only when the page has fully loaded does it attempt to create and disp
 
 Below are screenshots of the app working.
 
-![Screenshot1] (images/home.png)
+![Screenshot1](images/home.png)
 
-![Screenshot2] (images/page2.png)
+![Screenshot2](images/page2.png)
