@@ -11,6 +11,9 @@ u = g.get_user(sys.argv[1])
 username = sys.argv[1]
 print(username)
 
+data = {'username': username}
+report = firebase.put('', '/'+username, data)
+
 sunday = 0
 monday = 0
 tuesday = 0
